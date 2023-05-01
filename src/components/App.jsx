@@ -17,11 +17,11 @@ export const App = () => {
     const savedState = localStorage.getItem('myAppUsers');
     if (savedState !== 'null') {
       setUsers(JSON.parse(savedState));
-      return;
-    } else if (users === 'null') {
+    } else if (savedState === 'null') {
+
       fetchUsers().then(res => setUsers(res));
     }
-  }, [users]);
+  }, []);
 
   useEffect(() => {
     localStorage.setItem('myAppUsers', JSON.stringify(users));
