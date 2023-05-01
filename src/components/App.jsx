@@ -1,8 +1,13 @@
 import { useState } from 'react';
 import { useEffect } from 'react';
+import { TailSpin } from 'react-loader-spinner';
 import { nanoid } from 'nanoid';
 
 import { page, fetchUsers } from 'API/getUsers';
+import { Container } from './Container.styled';
+import { Card } from './Card/Card';
+import { List } from './List/List.styled';
+import { LoadBtn } from './Button/Button.styled';
 
 export const App = () => {
   const [users, setUsers] = useState(null);
@@ -21,11 +26,13 @@ export const App = () => {
     localStorage.setItem('myAppUsers', JSON.stringify(users));
   }, [users]);
 
-  function addFollower(name) {
+  function addFollower(id) {
     setUsers(prev => {
       return prev.map(tweet => {
-        if (tweet.user === name) {
-          return { ...tweet, followers: tweet.followers + 1 };
+        if (tweet.id === id) {
+          return tweet.following
+            ? { ...tweet, followers: tweet.followers - 1, following: false }
+            : { ...tweet, followers: tweet.followers + 1, following: true };
         } else {
           return tweet;
         }
@@ -38,30 +45,48 @@ export const App = () => {
       return;
     }
     fetchUsers().then(res => {
-      res !== undefined && setUsers(res);
+      res !== undefined &&
+        setUsers(prev => {
+          return [...prev, ...res];
+        });
     });
   }
   return (
-    <div>
+    <Container>
       {users ? (
         <>
-          <ul>
+          <List>
             {users.map(tweet => {
-              return <li key={nanoid()}>{tweet.user}</li>;
+              return (
+                <Card
+                  key={nanoid()}
+                  userInfo={tweet}
+                  handleFollowClick={addFollower}
+                ></Card>
+              );
             })}
-          </ul>
-          <button
+          </List>
+          <LoadBtn
             type="button"
             aria-label="load more"
             onClick={handleClick}
             disabled={page === 5}
           >
             Load more
-          </button>
+          </LoadBtn>
         </>
       ) : (
-        <div>Loading...</div>
+        <TailSpin
+          height="180"
+          width="180"
+          color="#0E79B2"
+          ariaLabel="tail-spin-loading"
+          radius="1"
+          wrapperStyle={{}}
+          wrapperClass=""
+          visible={true}
+        />
       )}
-    </div>
+    </Container>
   );
 };
