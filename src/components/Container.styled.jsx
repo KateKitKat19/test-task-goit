@@ -5,7 +5,7 @@ export const Container = styled.div`
   flex-direction: column;
   align-items: center;
   justify-content: center;
-
+  background-color: #ebdbcc;
   padding: 30px 15px;
   font-family: 'Montserrat';
   font-style: normal;

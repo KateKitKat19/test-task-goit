@@ -1,27 +1,28 @@
 import styled from 'styled-components';
 import { NavLink } from 'react-router-dom';
+import Back from '../assets/back.jpg';
 
 export const Wrapper = styled.div`
+  width: 100%;
+  height: 100vh;
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
 
-  padding: 30px 15px;
+  background-image: url(${Back});
+  background-position: center;
+  background-size: cover;
   font-family: 'Montserrat';
   font-style: normal;
   font-weight: 500;
   font-size: 20px;
   line-height: 24px;
 `;
-export const Title = styled.h2``;
-
-export const Image = styled.img`
-  display: block;
-  margin: 0;
-  padding: 0;
-  max-width: 100%;
-  width: 750px;
+export const Title = styled.h2`
+  font-family: 'Rubik', sans-serif;
+  font-size: 45px;
+  color: #6a4b3e;
+  margin-top: 55px;
 `;
 
 export const LinkStyled = styled(NavLink)`
