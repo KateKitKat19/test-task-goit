@@ -1,25 +1,30 @@
 import { useState } from 'react';
 import { useEffect } from 'react';
-import { TailSpin } from 'react-loader-spinner';
-import { nanoid } from 'nanoid';
+import { Routes, Route } from 'react-router-dom';
 
 import { page, fetchUsers } from 'API/getUsers';
 import { Container } from './Container.styled';
-import { Card } from './Card/Card';
-import { List } from './List/List.styled';
-import { LoadBtn } from './Button/Button.styled';
+import { TweetsPage } from 'pages/Tweets';
+import { Home } from 'pages/Home';
 
 export const App = () => {
   const [users, setUsers] = useState(null);
+  const [checkedLocalStorage, setCheckedLocalStorage] = useState(false);
 
   useEffect(() => {
-    const savedState = localStorage.getItem('myAppUsers');
-    if (savedState !== 'null') {
-      setUsers(JSON.parse(savedState));
-    } else if (savedState === 'null') {
-      fetchUsers().then(res => setUsers(res));
+    if (!checkedLocalStorage) {
+      const savedState = localStorage.getItem('myAppUsers');
+      if (savedState !== 'null') {
+        setTimeout(() => {
+          setUsers(JSON.parse(savedState));
+        }, 100);
+      } else if (savedState === 'null') {
+        fetchUsers().then(res => setUsers(res));
+      }
     }
-  }, []);
+
+    setCheckedLocalStorage(true);
+  }, [checkedLocalStorage]);
 
   useEffect(() => {
     localStorage.setItem('myAppUsers', JSON.stringify(users));
@@ -52,40 +57,21 @@ export const App = () => {
   }
   return (
     <Container>
-      {users ? (
-        <>
-          <List>
-            {users.map(tweet => {
-              return (
-                <Card
-                  key={nanoid()}
-                  userInfo={tweet}
-                  handleFollowClick={addFollower}
-                ></Card>
-              );
-            })}
-          </List>
-          <LoadBtn
-            type="button"
-            aria-label="load more"
-            onClick={handleClick}
-            disabled={page === 6}
-          >
-            Load more
-          </LoadBtn>
-        </>
-      ) : (
-        <TailSpin
-          height="180"
-          width="180"
-          color="#0E79B2"
-          ariaLabel="tail-spin-loading"
-          radius="1"
-          wrapperStyle={{}}
-          wrapperClass=""
-          visible={true}
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route
+          path="/tweets"
+          element={
+            <TweetsPage
+              users={users}
+              page={page}
+              addFnc={addFollower}
+              loadFnc={handleClick}
+            />
+          }
         />
-      )}
+        <Route path="*" element={<Home />} />
+      </Routes>
     </Container>
   );
 };

@@ -9,4 +9,5 @@ export const List = styled.ul`
   flex-wrap: wrap;
   gap: 48px;
   max-width: 1200px;
+  margin-top: 30px;
 `;
