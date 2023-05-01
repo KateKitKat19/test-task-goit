@@ -11,6 +11,7 @@ import { LoadBtn } from './Button/Button.styled';
 
 export const App = () => {
   const [users, setUsers] = useState(null);
+  console.log('App   users:', users);
 
   useEffect(() => {
     const savedState = localStorage.getItem('myAppUsers');
@@ -20,7 +21,7 @@ export const App = () => {
     } else if (users === 'null') {
       fetchUsers().then(res => setUsers(res));
     }
-  }, []);
+  }, [users]);
 
   useEffect(() => {
     localStorage.setItem('myAppUsers', JSON.stringify(users));

@@ -10,7 +10,7 @@ import {
 } from './Card.styled';
 
 export const Card = ({ userInfo, handleFollowClick }) => {
-  const { avatar, user, followers, tweets, id, following } = userInfo;
+  const { avatar, followers, tweets, id, following } = userInfo;
   return (
     <CardStyled>
       <Logo />
