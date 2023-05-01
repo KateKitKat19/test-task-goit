@@ -11,14 +11,12 @@ import { LoadBtn } from './Button/Button.styled';
 
 export const App = () => {
   const [users, setUsers] = useState(null);
-  console.log('App   users:', users);
 
   useEffect(() => {
     const savedState = localStorage.getItem('myAppUsers');
     if (savedState !== 'null') {
       setUsers(JSON.parse(savedState));
     } else if (savedState === 'null') {
-
       fetchUsers().then(res => setUsers(res));
     }
   }, []);
@@ -42,7 +40,7 @@ export const App = () => {
   }
 
   function handleClick() {
-    if (page >= 5) {
+    if (page >= 6) {
       return;
     }
     fetchUsers().then(res => {
@@ -71,7 +69,7 @@ export const App = () => {
             type="button"
             aria-label="load more"
             onClick={handleClick}
-            disabled={page === 5}
+            disabled={page === 6}
           >
             Load more
           </LoadBtn>
